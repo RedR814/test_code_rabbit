@@ -109,7 +109,11 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         h.right.color = BLACK;
     }
 
-    // 删除最小值
+    /**
+     * Removes the smallest element from the tree.
+     *
+     * @throws NoSuchElementException if the tree is empty
+     */
     public void deleteMin() {
         if (isEmpty()) throw new NoSuchElementException("RedBlackBST underflow");
         if (!isRed(root.left) && !isRed(root.right))
@@ -118,6 +122,14 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         if (root != null) root.color = BLACK;
     }
 
+    /**
+     * Deletes the minimum node from the subtree rooted at `h` and returns the new subtree root.
+     *
+     * Performs necessary color/rotation adjustments to preserve red-black invariants during deletion.
+     *
+     * @param h the root of the subtree to delete the minimum from; may be returned as `null` if the subtree becomes empty
+     * @return the updated root of the subtree after removal (possibly `null`)
+     */
     private Node deleteMin(Node h) {
         if (h.left == null)
             return null;
@@ -130,7 +142,11 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         return balance(h);
     }
 
-    // 删除最大值
+    /**
+     * Removes the largest element from this red-black binary search tree.
+     *
+     * @throws NoSuchElementException if the tree is empty
+     */
     public void deleteMax() {
         if (isEmpty()) throw new NoSuchElementException("RedBlackBST underflow");
         if (!isRed(root.left) && !isRed(root.right))
@@ -139,6 +155,12 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         if (root != null) root.color = BLACK;
     }
 
+    /**
+     * Deletes the maximum element from the subtree rooted at h and restores red-black properties.
+     *
+     * @param h the root of the subtree from which to remove the maximum element
+     * @return the root of the updated subtree after removal, or `null` if the subtree becomes empty
+     */
     private Node deleteMax(Node h) {
         if (isRed(h.left))
             h = rotateRight(h);
@@ -154,7 +176,14 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         return balance(h);
     }
 
-    // 删除操作
+    /**
+     * Removes the specified element from the tree if present and restores red–black balance.
+     *
+     * If the element is not found the tree remains unchanged. After removal the tree's
+     * red–black invariants are maintained and the root is set to black.
+     *
+     * @param data the element to remove
+     */
     public void delete(T data) {
         if (!contains(data)) return;
         if (!isRed(root.left) && !isRed(root.right))
@@ -217,34 +246,65 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         return h;
     }
 
-    // 查找最小值
+    /**
+     * Finds the smallest element stored in the tree.
+     *
+     * @return the smallest element in the tree
+     * @throws NoSuchElementException if the tree is empty
+     */
     public T min() {
         if (isEmpty()) throw new NoSuchElementException("calls min() with empty symbol table");
         return min(root).data;
     }
 
+    /**
+     * Locate the node with the minimum key in the subtree rooted at x.
+     *
+     * @param x the root of the subtree to search
+     * @return the node containing the smallest element in the subtree rooted at x
+     */
     private Node min(Node x) {
         if (x.left == null) return x;
         else return min(x.left);
     }
 
-    // 查找最大值
+    /**
+     * Retrieve the largest element stored in the tree.
+     *
+     * @return the largest element in the tree
+     * @throws NoSuchElementException if the tree is empty
+     */
     public T max() {
         if (isEmpty()) throw new NoSuchElementException("calls max() with empty symbol table");
         return max(root).data;
     }
 
+    /**
+     * Finds the node with the largest element in the subtree rooted at x.
+     *
+     * @param x the root of the subtree to search (must not be null)
+     * @return the rightmost node in the subtree containing the maximum element
+     */
     private Node max(Node x) {
         if (x.right == null) return x;
         else return max(x.right);
     }
 
-    // 中序遍历打印
+    /**
+     * Prints the tree's elements in ascending order using an in-order traversal.
+     *
+     * Prints each element separated by a space, then outputs a trailing newline.
+     */
     public void inorder() {
         inorder(root);
         System.out.println();
     }
 
+    /**
+     * Performs an in-order traversal of the subtree rooted at {@code h}, printing each element followed by a space to standard output.
+     *
+     * @param h the root of the subtree to traverse; may be {@code null}
+     */
     private void inorder(Node h) {
         if (h == null) return;
         inorder(h.left);
@@ -252,12 +312,22 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         inorder(h.right);
     }
 
-    // 前序遍历打印
+    /**
+     * Prints the tree's elements in pre-order (root, left, right).
+     *
+     * Prints node values separated by a single space and terminates the output with a newline.
+     * If the tree is empty this writes only a newline.
+     */
     public void preorder() {
         preorder(root);
         System.out.println();
     }
 
+    /**
+     * Prints the subtree rooted at {@code h} in pre-order to standard output, separating elements with a space.
+     *
+     * @param h the root of the subtree to print (may be {@code null})
+     */
     private void preorder(Node h) {
         if (h == null) return;
         System.out.print(h.data + " ");
@@ -265,12 +335,23 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         preorder(h.right);
     }
 
-    // 后序遍历打印
+    /**
+     * Prints the tree's elements in post-order traversal.
+     *
+     * Elements are printed in ascending post-order sequence separated by single spaces and the output is terminated with a newline.
+     */
     public void postorder() {
         postorder(root);
         System.out.println();
     }
 
+    /**
+     * Performs a post-order traversal of the subtree rooted at h and prints each node's data followed by a space.
+     *
+     * Does nothing if h is null.
+     *
+     * @param h the root of the subtree to traverse
+     */
     private void postorder(Node h) {
         if (h == null) return;
         postorder(h.left);
@@ -278,28 +359,54 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         System.out.print(h.data + " ");
     }
 
-    // 检查树是否为空
+    /**
+     * Checks whether the tree contains no elements.
+     *
+     * @return {@code true} if the tree contains no elements, {@code false} otherwise.
+     */
     public boolean isEmpty() {
         return root == null;
     }
 
-    // 获取树的高度
+    /**
+     * Compute the height of the tree.
+     *
+     * @return the height of the tree; returns -1 for an empty tree (null root)
+     */
     public int height() {
         return height(root);
     }
 
+    /**
+     * Compute the height of the subtree rooted at the given node.
+     *
+     * @param x the root of the subtree, or {@code null} to represent an empty tree
+     * @return the height (number of edges on the longest path from {@code x} to a leaf); {@code -1} if {@code x} is {@code null}
+     */
     private int height(Node x) {
         if (x == null) return -1;
         return 1 + Math.max(height(x.left), height(x.right));
     }
 
-    // 查找小于等于给定值的最大元素
+    /**
+     * Finds the greatest element less than or equal to the given value.
+     *
+     * @param data the value to compare against
+     * @return the greatest element <= {@code data}, or {@code null} if no such element exists
+     */
     public T floor(T data) {
         Node x = floor(root, data);
         if (x == null) return null;
         else return x.data;
     }
 
+    /**
+     * Finds the node containing the greatest element less than or equal to `data` in the subtree rooted at `x`.
+     *
+     * @param x the root of the subtree to search (may be null)
+     * @param data the value to compute the floor for
+     * @return the node whose `data` is the largest value less than or equal to `data` in the subtree, or `null` if none exists
+     */
     private Node floor(Node x, T data) {
         if (x == null) return null;
         int cmp = data.compareTo(x.data);
@@ -310,13 +417,25 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         else return x;
     }
 
-    // 查找大于等于给定值的最小元素
+    /**
+     * Finds the smallest element in the tree that is greater than or equal to the given value.
+     *
+     * @param data the value to compare against
+     * @return the smallest element >= {@code data}, or {@code null} if no such element exists
+     */
     public T ceiling(T data) {
         Node x = ceiling(root, data);
         if (x == null) return null;
         else return x.data;
     }
 
+    /**
+     * Finds the node with the smallest value greater than or equal to the given value in the subtree rooted at x.
+     *
+     * @param x    root of the subtree to search, may be null
+     * @param data value to compare against node keys
+     * @return the node containing the smallest element >= data, or `null` if no such element exists
+     */
     private Node ceiling(Node x, T data) {
         if (x == null) return null;
         int cmp = data.compareTo(x.data);
@@ -327,13 +446,26 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         else return x;
     }
 
-    // 返回排名为k的元素（从0开始计数）
+    /**
+     * Finds the element whose rank is k in the tree's ascending order (0-based).
+     *
+     * @param k the rank of the desired element, where 0 is the smallest element
+     * @return the element with rank k
+     * @throws IllegalArgumentException if k is less than 0 or greater than or equal to the tree size
+     */
     public T select(int k) {
         if (k < 0 || k >= size()) throw new IllegalArgumentException();
         Node x = select(root, k);
         return x.data;
     }
 
+    /**
+     * Finds the node containing the element of rank k within the subtree rooted at x.
+     *
+     * @param x the root of the subtree to search (may be null)
+     * @param k the rank (0-based) of the desired element within the subtree
+     * @return the `Node` whose rank is k within the subtree, or `null` if k is out of range or x is null
+     */
     private Node select(Node x, int k) {
         if (x == null) return null;
         int t = size(x.left);
@@ -342,11 +474,23 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         else return x;
     }
 
-    // 返回指定元素的排名（从0开始计数）
+    /**
+     * Compute the number of elements in the tree that are strictly less than the given value.
+     *
+     * @param data the value whose rank to compute
+     * @return the count of elements strictly less than `data` (rank starting at 0)
+     */
     public int rank(T data) {
         return rank(root, data);
     }
 
+    /**
+     * Computes the number of elements strictly less than {@code data} in the subtree rooted at {@code x}.
+     *
+     * @param x    the root of the subtree to examine; may be {@code null}
+     * @param data the key to compare against
+     * @return the count of elements in the subtree rooted at {@code x} that are less than {@code data} (returns 0 if {@code x} is {@code null})
+     */
     private int rank(Node x, T data) {
         if (x == null) return 0;
         int cmp = data.compareTo(x.data);
@@ -355,14 +499,27 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
         else return size(x.left);
     }
 
-    // 返回范围内的元素数量
+    /**
+     * Count elements within the inclusive range [lo, hi].
+     *
+     * @param lo the lower bound (inclusive)
+     * @param hi the upper bound (inclusive)
+     * @return the number of elements between {@code lo} and {@code hi} (inclusive); returns {@code 0} if {@code lo.compareTo(hi) > 0}
+     */
     public int size(T lo, T hi) {
         if (lo.compareTo(hi) > 0) return 0;
         if (contains(hi)) return rank(hi) - rank(lo) + 1;
         else return rank(hi) - rank(lo);
     }
 
-    // 迭代器实现
+    /**
+     * Returns an iterator that traverses the tree's elements in ascending (in-order) order.
+     *
+     * The returned iterator performs an in-order traversal from smallest to largest element;
+     * its remove() method is unsupported and will throw UnsupportedOperationException.
+     *
+     * @return an in-order {@link Iterator} over the tree's elements
+     */
     public Iterator<T> iterator() {
         return new RedBlackTreeIterator();
     }
@@ -370,10 +527,22 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
     private class RedBlackTreeIterator implements Iterator<T> {
         private Stack<Node> stack = new Stack<>();
         
+        /**
+         * Creates an in-order iterator positioned at the smallest element.
+         *
+         * Initializes the iterator's stack by pushing the leftmost path starting
+         * from the tree root so that the first call to {@link #next()} returns
+         * the smallest element in the tree.
+         */
         public RedBlackTreeIterator() {
             pushLeft(root);
         }
         
+        /**
+         * Pushes the given node and all of its left descendants onto the iterator stack.
+         *
+         * @param x the root of the subtree whose left-path nodes will be pushed; may be null
+         */
         private void pushLeft(Node x) {
             while (x != null) {
                 stack.push(x);
@@ -381,16 +550,31 @@ public class RedBlackTree<T extends Comparable<T>> implements Iterable<T> {
             }
         }
         
+        /**
+         * Indicates whether the iterator has more elements.
+         *
+         * @return `true` if there are more elements to iterate over, `false` otherwise.
+         */
         public boolean hasNext() {
             return !stack.isEmpty();
         }
         
+        /**
+         * Advance the iterator and return the next element in the tree's in-order sequence.
+         *
+         * @return the next element in the in-order traversal
+         */
         public T next() {
             Node current = stack.pop();
             pushLeft(current.right);
             return current.data;
         }
         
+        /**
+         * Indicates that this iterator does not support element removal.
+         *
+         * @throws UnsupportedOperationException always thrown to signal that remove() is not supported by this iterator
+         */
         public void remove() {
             throw new UnsupportedOperationException();
         }
